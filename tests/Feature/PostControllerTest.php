@@ -68,7 +68,7 @@ class PostControllerTest extends TestCase
         ]);
 
         $response->assertRedirect(route('posts.index'))
-                ->assertSessionHas('success', 'پست با موفقیت ایجاد شد.');
+                 ->assertSessionHas('success', 'پست با موفقیت ایجاد شد.');
 
         $this->assertDatabaseHas('posts', [
             'title' => 'عنوان تست',

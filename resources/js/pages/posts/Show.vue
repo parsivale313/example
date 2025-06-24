@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="js" setup>
 defineProps({
   post: Object,
 });

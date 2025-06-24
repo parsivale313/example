@@ -50,7 +50,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="js" setup>
 import { Link, router } from '@inertiajs/vue3';
 
 defineProps({
