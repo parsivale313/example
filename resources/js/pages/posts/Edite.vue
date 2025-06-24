@@ -22,17 +22,24 @@
       </div>
 
       <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">تصویر</label>
+        <label class="block text-sm font-medium mb-1">تصویر فعلی</label>
+        <img
+          v-if="form.imagePreview || post.image_url"
+          :src="form.imagePreview ? form.imagePreview : post.image_url"
+          alt="تصویر پست"
+          class="w-full rounded mb-4 object-cover max-h-64"
+        />
+        <label class="block text-sm font-medium mb-1">تصویر جدید (در صورت تمایل تغییر دهید)</label>
         <input type="file" @change="handleFileChange" accept="image/*" />
         <div v-if="form.errors.image" class="text-red-600 text-sm mt-1">{{ form.errors.image }}</div>
       </div>
 
       <button
         type="submit"
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
         :disabled="form.processing"
       >
-        ارسال
+        ذخیره تغییرات
       </button>
     </form>
   </div>
@@ -41,17 +48,36 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 
+defineProps({
+  post: Object,
+});
+
 const form = useForm({
-  title: '',
-  body: '',
+  title: post.title,
+  body: post.body,
   image: null,
 });
 
+const formRef = ref(null);
+const formData = reactive(form);
+
+const formImagePreview = ref(null);
+
 function handleFileChange(e) {
-  form.image = e.target.files[0];
+  const file = e.target.files[0];
+  form.image = file || null;
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      form.imagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    form.imagePreview = null;
+  }
 }
 
 function submit() {
-  form.post(route('posts.store'));
+  form.put(route('posts.update', post.id));
 }
 </script>
