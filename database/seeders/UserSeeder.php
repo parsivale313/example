@@ -21,12 +21,14 @@ class UserSeeder extends Seeder
         //     'password' => Hash::make('1234567890'),
         // ]);
 
-        DB::table('users')->insert([
-            'name' => 'amir',
+        User::create([
+            'name' => 'Amir',
             'email' => 'amir@gmail.com',
-            'password' => Hash::make('123456789')
+            'password' => Hash::make('123456789'),
         ]);
-        
+
         User::factory()->count(5)->create();
+    
     }
+
 }
