@@ -155,4 +155,22 @@ class PostControllerTest extends TestCase
         // بررسی حذف فایل تصویر
         Storage::disk('public')->assertMissing($path);
     }
+    /**
+ * تست اعتبارسنجی هنگام ارسال پست جدید
+ */
+    public function test_store_validation_errors()
+    {
+        $user = \App\Models\User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->post(route('posts.store'), [
+            'title' => '',   // خالی
+            'body' => '',    // خالی
+            // بدون تصویر هم ارسال می‌کنیم
+        ]);
+
+        $response->assertSessionHasErrors(['title', 'body']);
+        $this->assertDatabaseCount('posts', 0);
+    }
+
 }
